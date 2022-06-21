@@ -1,7 +1,10 @@
 #include <iostream>
+#include <stdlib.h>
+#include "AST.cc"
 
-#include "../src/AST.cc"
-
+// The LogError routines are simple helper routines that our parser will use to
+// handle errors. The error recovery in our parser will not be the best and is
+// not particular user-friendly
 class Logger {
 public:
   /// LogError* - These are little helper functions for error handling.

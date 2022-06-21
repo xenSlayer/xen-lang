@@ -1,11 +1,37 @@
+// ++++++++++++++++++++++++++++++++++++++++++++++++
+// +                 AST NODES                    +
+// ++++++++++++++++++++++++++++++++++++++++++++++++
+/*
+? A. NumberExprAST
+* NumberExprAST - Expression class for numeric literals like "1.0".
+* Stores the number value in its node.
+
+? B. VariableExprAST
+* VariableExprAST - Expression class for referencing a variable, like "a".
+* Stores variable name
+
+? C. BinaryExprAST
+* BinaryExprAST - Expression class for a binary operator.
+*Stores the opcode (e.g. +), LHS, RHS values
+
+? D. CallExprAST
+* CallExprAST - Expression class for function calls.
+* Stores callee '()' and arguments list passed
+
+? E. PrototypeAST
+* PrototypeAST - This class represents the "prototype" for a function, which
+* captures its name, and its argument names (thus implicitly the number of
+* arguments the function takes)
+
+? F. FunctionAST
+* FunctionAST - This class represents a function definition itself.
+* Stores the 'PrototypeAST' and the body of the function.
+*/
+
 #include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++
-// +                 AST NODES                    +
-// ++++++++++++++++++++++++++++++++++++++++++++++++
 
 /// ExprAST - Base class for all expression nodes.
 class ExprAST {
@@ -52,7 +78,7 @@ public:
 /// CallExprAST - Expression class for function calls.
 // (string arg1, int arg2)
 // the callee and the args
-// callee -> ()
+// callee -> function()
 // args -> arg1, arg2
 class CallExprAST : public ExprAST {
   std::string Callee;

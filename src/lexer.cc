@@ -11,7 +11,8 @@ class Lexer {
 
 public:
   // gettok - Return the next token from standard input.
-  // Todo convert get_token to read whole content of the file rather then single
+  // Todo convert get_token to read whole content of the file rather then
+  // console content
   static int get_token() {
 
     static int LastChar = ' ';

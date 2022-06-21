@@ -1,17 +1,28 @@
+// ++++++++++++++++++++++++++++++++++++++++++++++++
+// +                 PARSER                       +
+// ++++++++++++++++++++++++++++++++++++++++++++++++
+
 #include <iostream>
 #include <memory>
 #include <stdlib.h>
 
 #include "AST.cc"
 #include "lexer.cc"
-#include "utils/logger.cc"
+#include "logger.cc"
 
 /// CurTok/getNextToken - Provide a simple token buffer.  CurTok is the
 /// current token the parser is looking at.
-static int CurTok;
+// Every function in our parser will assume that CurTok is the current token
+// that needs to be parsed.
+
+// static int CurTok;
 
 class Parser {
 public:
+  static int CurTok;
+
+private:
+  std::unique_ptr<Logger> logger = std::make_unique<Logger>();
   // / getNextToken reads another token from the lexer and updates CurTok with
   // / its results.
   static int getNextToken() {
@@ -90,6 +101,25 @@ public:
           return logger->LogError("Expected ')' or ',' in argument list");
       }
       return std::make_unique<CallExprAST>(IdName, std::move(Args));
+    }
+  }
+
+  /// primary
+  ///   ::= identifierexpr
+  ///   ::= numberexpr
+  ///   ::= parenexpr
+  static std::unique_ptr<ExprAST> ParsePrimary() {
+    std::unique_ptr<Logger> logger = std::make_unique<Logger>();
+    switch (CurTok) {
+    case tok_identifier:
+      return ParseIdentifierExpr();
+    case tok_number:
+      return ParseNumberExpr();
+    case '(':
+      return ParseParenExpr();
+    default:
+      logger->LogError("unknown token when expecting an expression");
+      break;
     }
   }
 };

@@ -45,9 +45,7 @@ private:
     std::unique_ptr<Logger> logger = std::make_unique<Logger>();
 
     // parse the expression
-    // Todo ParseExpression()
     auto V = ParseExpression();
-    // auto V = 0;
     // ParseExpression();
     if (!V) {
       return nullptr;
@@ -108,6 +106,7 @@ private:
   ///   ::= identifierexpr
   ///   ::= numberexpr
   ///   ::= parenexpr
+  // for example, the expression “a+b+(c+d)*e*f+g”
   static std::unique_ptr<ExprAST> ParsePrimary() {
     std::unique_ptr<Logger> logger = std::make_unique<Logger>();
     switch (CurTok) {
@@ -120,6 +119,26 @@ private:
     default:
       logger->LogError("unknown token when expecting an expression");
       break;
+    }
+  }
+
+  /// expression
+  ///   ::= primary binoprhs
+  ///
+  static std::unique_ptr<ExprAST> ParseExpression() {
+    // returns the expression
+    auto LHS = ParsePrimary();
+    if (LHS) {
+      return ParseBinOpRHS(0, std::move(LHS));
+    }
+    return nullptr;
+  }
+
+  /// binoprhs
+  ///   ::= ('+' primary)*
+  static std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec,
+                                                std::unique_ptr<ExprAST> LHS) {
+    while (true) {
     }
   }
 };

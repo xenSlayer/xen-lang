@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
+
 #include "AST.cc"
 
 // The LogError routines are simple helper routines that our parser will use to
@@ -8,10 +9,10 @@
 class Logger {
 public:
   /// LogError* - These are little helper functions for error handling.
-  static std::unique_ptr<ExprAST> LogError(const std::string &error) {
+  static std::unique_ptr<ExprAST> LogError(const std::string error) {
     // print error in console screen
-    fprintf(stderr, "LogError: %s\n", error);
-    // std::cout << "LogError: " << error << std::endl;
+    // fprintf(stderr, " %s\n", error);
+    std::cout << "[ERROR]: " << error << std::endl;
     return nullptr;
   }
 

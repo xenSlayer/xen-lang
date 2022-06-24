@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <string>
 
 #include "../include/const.h"
@@ -12,7 +13,8 @@
 
 class IUtil {
 public:
-  virtual const std::string read_ascii_file(const std::string &path) = 0;
+  virtual const std::map<unsigned int, std::string>
+  scanner(const std::string &path) = 0;
 
 private:
   virtual bool is_valid_xen_file(const std::string &path) = 0;
@@ -21,12 +23,14 @@ private:
 
 class Util : IUtil {
 public:
-  const std::string read_ascii_file(const std::string &path) override {
+  const std::map<unsigned int, std::string>
+  scanner(const std::string &path) override {
     Logger *logger = new Logger();
     logger->log("reading file contents");
     std::ifstream file;
     unsigned int line_number = 0;
     std::string line;
+    std::map<unsigned int, std::string> buffer = {};
 
     file.open(path, std::ios::in);
     // check file validity and open/read .xen file
@@ -35,9 +39,10 @@ public:
         line_number++;
         // only if the line is not comment
         if (is_code_line(line))
-          // return line;
-          std::cout << line << std::endl;
+          buffer[line_number] = line;
+        // std::cout << line << std::endl;
       }
+      return std::move(buffer);
       file.close();
     } else {
       logger->error("unable to open file");

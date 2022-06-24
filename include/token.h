@@ -1,14 +1,16 @@
-// ++++++++++++++++++++++++++++++++++++++++++++++++
-// +                LEXER TOKENS                  +
-// ++++++++++++++++++++++++++++++++++++++++++++++++
-
-#ifndef XEN_LEXER_H
-#define XEN_LEXER_H
-
+#ifndef XEN_TOKEN_H
+#define XEN_TOKEN_H
 #include <string>
+
+struct Token {
+  std::string data;
+  int type;
+  unsigned int line;
+};
+
 // The lexer returns tokens [0-255] if it is an unknown character, otherwise
 // one of these for known things.
-enum _Token {
+enum _TokenType {
   tok_eof = -1,
 
   // commands
@@ -21,6 +23,6 @@ enum _Token {
   tok_number = -5,
 };
 
-typedef enum _Token TokenType;
+typedef enum _TokenType TokenType;
 
 #endif

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string>
 
-#include "../include/lexer.h"
+#include "../include/token.h"
 
 static std::string IdentifierStr; // Filled in if tok_identifier
 static double NumVal;             // Filled in if tok_number

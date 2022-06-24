@@ -78,8 +78,9 @@ public:
 /// CallExprAST - Expression class for function calls.
 // (string arg1, int arg2)
 // the callee and the args
-// callee -> function()
+// callee -> function name being called
 // args -> arg1, arg2
+// function(arg1, arg2)
 class CallExprAST : public ExprAST {
   std::string Callee;
   std::vector<std::unique_ptr<ExprAST>> Args;

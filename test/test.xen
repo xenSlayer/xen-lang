@@ -1,9 +1,9 @@
 # Compute the x'th fibonacci number.
 def fib(x)
-  if x < 3 then
-    return 1
-  else
-    fib(x-1)+fib(x-2)
+    if x < 3
+      return 1
+    else
+      fib(x-1)+fib(x-2)
 
 # This expression will compute the 40th number.
 fib(40)
@@ -15,3 +15,6 @@ fib(40)
 # fib, x
 ## operators ##
 # <, +, -
+
+def print_name(string name)
+    print(name)

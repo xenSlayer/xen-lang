@@ -1,53 +1,68 @@
+// ++++++++++++++++++++++++++++++++++++++++++++++++
+// +                UTILS                         +
+// ++++++++++++++++++++++++++++++++++++++++++++++++
+
 #include <fstream>
 #include <iostream>
 #include <string>
 
-class Util {
+#include "../include/const.h"
+
+#include "logger.cc"
+
+class IUtil {
 public:
-  char *read_ascii_file(const char *path) {
-    // open and read .xen file
-    FILE *file = fopen(path, "r");
-    // check if the file is valid
-    if (!file) {
-      // return 0 if error opening file
-      printf("ERROR: could not open file %s\n", path);
-      return NULL;
+  virtual const std::string read_ascii_file(const std::string &path) = 0;
+
+private:
+  virtual bool is_valid_xen_file(const std::string &path) = 0;
+  virtual bool is_code_line(const std::string &line) = 0;
+};
+
+class Util : IUtil {
+public:
+  const std::string read_ascii_file(const std::string &path) override {
+    Logger *logger = new Logger();
+    logger->log("reading file contents");
+    std::ifstream file;
+    unsigned int line_number = 0;
+    std::string line;
+
+    file.open(path, std::ios::in);
+    // check file validity and open/read .xen file
+    if (is_valid_xen_file(path) && file.is_open()) {
+      while (getline(file, line)) {
+        line_number++;
+        // only if the line is not comment
+        if (is_code_line(line))
+          // return line;
+          std::cout << line << std::endl;
+      }
+      file.close();
+    } else {
+      logger->error("unable to open file");
+      // printf("Unable to open file %s", path);
+      // std::cout << "Exiting compiler..." << std::endl;
+      exit(0);
     }
-
-    // get the end of the file
-    fseek(file, 0, SEEK_END);
-    // size of the file for memory allocation
-    int size = ftell(file);
-    fseek(file, 0, SEEK_SET);
-
-    // buffer memory allocation of current file size + 1
-    char *buf = (char *)malloc(sizeof(char) * (size + 1));
-    // if memory allocation fails
-    if (!buf) {
-      printf("ERROR: could not allocate memory for file!\n");
-      return NULL;
-    }
-    fread(buf, 1, size, file);
-    // add an extra byte at the end of file for reference
-    buf[size] = '\0';
-
-    fclose(file);
-
-    // return the contents of the file as buffer
-    return buf;
   }
 
-  // std::string *read_file(const std::string &pathToFile) {
-  //   std::fstream newfile;
-  //   newfile.open(pathToFile, std::ios::in);
-  //   if (newfile.is_open()) { // checking whether the file is open
-  //     std::string tp;
-  //     while (getline(
-  //         newfile, tp)) { // read data from file object and put it into
-  //         string.
-  //       std::cout << tp << "\n"; // print the data of the string
-  //     }
-  //     newfile.close(); // close the file object.
-  //   }
-  // }
+private:
+  // ? check if the file is a valid xen file.
+  // ! exit the program if the file in nat a valid xen file
+  // TODO change the code below to check the file is valid xen file
+  // ! code below may break if the file path contains period in folder name
+  bool is_valid_xen_file(const std::string &path) override {
+    if (path.substr(path.find_last_of(".") + 1) == "xen")
+      return true;
+    else
+      return false;
+  }
+
+  bool is_code_line(const std::string &line) override {
+    if (line.front() != xenconst::comment && !line.empty())
+      return true;
+    else
+      return false;
+  }
 };

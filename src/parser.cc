@@ -9,20 +9,19 @@
 #include "AST.cc"
 #include "lexer.cc"
 #include "logger.cc"
+#include "operators.cc"
 
 /// CurTok/getNextToken - Provide a simple token buffer.  CurTok is the
 /// current token the parser is looking at.
 // Every function in our parser will assume that CurTok is the current token
 // that needs to be parsed.
 
-// static int CurTok;
+static int CurTok;
 
 class Parser {
-public:
-  static int CurTok;
 
 private:
-  std::unique_ptr<Logger> logger = std::make_unique<Logger>();
+  Logger *logger = new Logger();
   // / getNextToken reads another token from the lexer and updates CurTok with
   // / its results.
   static int getNextToken() {
@@ -42,7 +41,7 @@ private:
   static std::unique_ptr<ExprAST> ParseParenExpr() {
     getNextToken(); // eat (.
 
-    std::unique_ptr<Logger> logger = std::make_unique<Logger>();
+    Logger *logger = new Logger();
 
     // parse the expression
     auto V = ParseExpression();
@@ -65,7 +64,7 @@ private:
   ///   ::= identifier
   ///   ::= identifier '(' expression* ')'
   static std::unique_ptr<ExprAST> ParseIdentifierExpr() {
-    std::unique_ptr<Logger> logger = std::make_unique<Logger>();
+    Logger *logger = new Logger();
     std::string IdName = IdentifierStr;
 
     getNextToken();      // eat Identifier
@@ -108,7 +107,7 @@ private:
   ///   ::= parenexpr
   // for example, the expression “a+b+(c+d)*e*f+g”
   static std::unique_ptr<ExprAST> ParsePrimary() {
-    std::unique_ptr<Logger> logger = std::make_unique<Logger>();
+    Logger *logger = new Logger();
     switch (CurTok) {
     case tok_identifier:
       return ParseIdentifierExpr();
@@ -138,7 +137,31 @@ private:
   ///   ::= ('+' primary)*
   static std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec,
                                                 std::unique_ptr<ExprAST> LHS) {
+
+    std::unique_ptr<BinaryOperator> Op = std::make_unique<BinaryOperator>();
     while (true) {
+      int CurTokPrec = Op->getTokPrecedence(CurTok);
+
+      // ignore if precedence of the current token 'operator' is less, i.e its
+      // not a valid bin op.
+      // If this is a binop that binds at least as tightly as the current
+      // binop, consume it, otherwise we are done.
+      if (CurTokPrec < ExprPrec) {
+        return LHS;
+      } else { // if its is a valid binop
+        int BinOp = CurTok;
+        getNextToken(); // eat binop
+        auto RHS = ParsePrimary();
+        if (RHS) {
+          int NextTokPrec = Op->getTokPrecedence(CurTok);
+          if (CurTokPrec < NextTokPrec) {
+            LHS = std::make_unique<BinaryExprAST>(BinOp, std::move(LHS),
+                                                  std::move(RHS));
+          }
+        } else {
+          return nullptr;
+        }
+      }
     }
   }
 };

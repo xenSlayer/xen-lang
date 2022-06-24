@@ -17,9 +17,7 @@
 
 /// BinaryOpPrecedence - This holds the precedence for each binary operator that
 /// is defined.
-static std::map<char, int> BinaryOpPrecedence;
-
-BinaryOpPrecedence = {};
+static std::map<char, int> BinaryOpPrecedence = {};
 
 BinaryOpPrecedence['<'] = 10;
 BinaryOpPrecedence['>'] = 10;

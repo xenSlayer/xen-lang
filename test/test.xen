@@ -22,8 +22,3 @@ def print_name(string name)
 
 
 print(name)
-
-
-
-
-

@@ -24,24 +24,25 @@ private:
   Logger *logger = new Logger();
   // / getNextToken reads another token from the lexer and updates CurTok with
   // / its results.
-  static int getNextToken() {
+public:
+  ~Parser() { delete logger; }
+
+  int getNextToken() {
     std::unique_ptr<Lexer> lexer = std::make_unique<Lexer>();
     // std::unique_ptr<Lexer> lexer(new Lexer());
     return CurTok = lexer->get_token();
   }
 
   /// numberexpr ::= number
-  static std::unique_ptr<ExprAST> ParseNumberExpr() {
+  std::unique_ptr<ExprAST> ParseNumberExpr() {
     auto Result = std::make_unique<NumberExprAST>(NumVal);
     getNextToken(); // consume the number
     return std::move(Result);
   }
 
   /// parenexpr ::= '(' expression ')'
-  static std::unique_ptr<ExprAST> ParseParenExpr() {
+  std::unique_ptr<ExprAST> ParseParenExpr() {
     getNextToken(); // eat (.
-
-    Logger *logger = new Logger();
 
     // parse the expression
     auto V = ParseExpression();
@@ -63,11 +64,11 @@ private:
   /// identifierexpr
   ///   ::= identifier
   ///   ::= identifier '(' expression* ')'
-  static std::unique_ptr<ExprAST> ParseIdentifierExpr() {
-    Logger *logger = new Logger();
+  std::unique_ptr<ExprAST> ParseIdentifierExpr() {
     std::string IdName = IdentifierStr;
 
     getNextToken();      // eat Identifier
+    
     if (CurTok != '(') { // Simple variable ref.
       return std::make_unique<VariableExprAST>(IdName);
     }
@@ -97,6 +98,7 @@ private:
         } else
           return logger->LogError("Expected ')' or ',' in argument list");
       }
+      delete logger;
       return std::make_unique<CallExprAST>(IdName, std::move(Args));
     }
   }
@@ -106,7 +108,7 @@ private:
   ///   ::= numberexpr
   ///   ::= parenexpr
   // for example, the expression “a+b+(c+d)*e*f+g”
-  static std::unique_ptr<ExprAST> ParsePrimary() {
+  std::unique_ptr<ExprAST> ParsePrimary() {
     Logger *logger = new Logger();
     switch (CurTok) {
     case tok_identifier:
@@ -119,12 +121,13 @@ private:
       logger->LogError("unknown token when expecting an expression");
       break;
     }
+    delete logger;
   }
 
   /// expression
   ///   ::= primary binoprhs
   ///
-  static std::unique_ptr<ExprAST> ParseExpression() {
+  std::unique_ptr<ExprAST> ParseExpression() {
     // returns the expression
     auto LHS = ParsePrimary();
     if (LHS) {
@@ -135,8 +138,8 @@ private:
 
   /// binoprhs
   ///   ::= ('+' primary)*
-  static std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec,
-                                                std::unique_ptr<ExprAST> LHS) {
+  std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec,
+                                         std::unique_ptr<ExprAST> LHS) {
 
     std::unique_ptr<BinaryOperator> Op = std::make_unique<BinaryOperator>();
     while (true) {

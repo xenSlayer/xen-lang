@@ -9,42 +9,42 @@
 //=================================================================
 #include <iostream>
 #include <memory>
-#include <typeinfo>
 #include <vector>
 
+#include "../include/memory.h"
 #include "../include/token.h"
 
 #include "utils.cc"
 
+//
+//
+// ==================== MAIN =============================
+//
+// =======================================================
 int main(int argc, const char *argv[]) {
-  if (argc > 2) {
-    std::cout << "starting xen compiler..." << std::endl;
-    std::unique_ptr<Util> util = std::make_unique<Util>();
+  {
+    if (argc > 2 && std::string(argv[1]) == "compile") {
+      std::cout << "starting xen compiler..." << std::endl;
+      Utils utils = Utils();
+      std::map<unsigned int, std::string> buffer = utils.scanner((std::string)argv[2]);
 
-    std::map<unsigned int, std::string> buffer =
-        util->scanner((std::string)argv[2]);
+      std::vector<Token> *token_list = new std::vector<Token>;
 
-    std::vector<Token> token_list = {};
+      for (auto const &buff : buffer) {
+        Token token = Token(buff.second, buff.first, tok_identifier);
+        (*token_list).push_back(token);
+      }
 
-    for (auto const &buff : buffer) {
-      Token *token = new Token();
-      token->data = buff.second;
-      token->line = buff.first;
-      token->type = tok_identifier;
-      token_list.push_back(*(token));
-      free(token);
+      for (Token token : *token_list) {
+        std::cout << token.line << ". " << token.data << " :: " << token.type
+                  << std::endl;
+      }
+      delete token_list;
+    } else {
+      std::cout << "invalid arguments\nexiting compiler..." << std::endl;
     }
-
-    for (int i = 0; i < token_list.max_size(); i++) {
-      Token token = token_list[i];
-      std::cout << token.line << ". " << token.data << " :: " << token.type
-                << std::endl;
-    }
-
-  } else {
-    std::cout << "invalid arguments\nexiting compiler..." << std::endl;
-    exit(0);
   }
+  PrintMemoryUsage();
 
   return 0;
 }

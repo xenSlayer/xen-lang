@@ -2,10 +2,13 @@
 #define XEN_TOKEN_H
 #include <string>
 
-struct Token {
+class Token {
+public:
   std::string data;
   int type;
   unsigned int line;
+  Token(std::string data, unsigned int line, int type)
+      : data(data), line(line), type(type) {}
 };
 
 // The lexer returns tokens [0-255] if it is an unknown character, otherwise

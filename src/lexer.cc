@@ -4,16 +4,28 @@
 
 #include "../include/token.h"
 
-static std::string IdentifierStr; // Filled in if tok_identifier
-static double NumVal;             // Filled in if tok_number
-
-class Lexer {
-
+class ILexer {
 public:
+  virtual int get_token() = 0;
+};
+
+class Lexer : ILexer {
+private:
+  std::map<unsigned int, std::string> buffer;
+  static std::string IdentifierStr; // Filled in if tok_identifier
+  static double NumVal;             // Filled in if tok_number
+public:
+  Lexer(std::map<unsigned int, std::string> buffer) : buffer(buffer) {}
+
   // gettok - Return the next token from standard input.
   // Todo convert get_token to read whole content of the file rather then
   // console content
-  static int get_token() {
+  Token *get_token() override {
+
+    for (auto const &buff : buffer) {
+      Token token = Token(buff.second, buff.first, tok_identifier);
+      (*token_list).push_back(token);
+    }
 
     static int LastChar = ' ';
 

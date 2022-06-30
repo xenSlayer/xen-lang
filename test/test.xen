@@ -18,7 +18,3 @@ fib(40)
 
 def print_name(string name)
     print(name)
-
-
-
-print(name)

@@ -1,2 +1,4 @@
-std::unique_ptr<std::map<unsigned int, std::string>> buffer =
-          std::make_unique<std::map<unsigned int, std::string>>();
+for (Token token : *token_list) {
+      //   std::cout << token.line << ". " << token.data << " :: " << token.type
+      //             << std::endl;
+      // }

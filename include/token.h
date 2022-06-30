@@ -4,10 +4,10 @@
 
 class Token {
 public:
-  std::string data;
+  const char *data;
   int type;
   unsigned int line;
-  Token(std::string data, unsigned int line, int type)
+  Token(const char *data, unsigned int line, int type)
       : data(data), line(line), type(type) {}
 };
 

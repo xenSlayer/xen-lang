@@ -47,13 +47,11 @@ class NumberExprAST : public ExprAST {
   double val;
 
 public:
-  // assigning value through constructor.lol
-  // val(v) means val takes the value from v 😭
   NumberExprAST(double v) : val(v) {}
 };
 
 /// VariableExprAST - Expression class for referencing a variable, like "a".
-// for AST handling of variable expression 🏁
+// for AST handling of variable expression
 class VariableExprAST : public ExprAST {
   std::string variable;
 
@@ -109,6 +107,9 @@ public:
 };
 
 /// FunctionAST - This class represents a function definition itself.
+// args:
+// arg1: std::unique_ptr<PrototypeAST> Proto;
+// arg2: std::unique_ptr<ExprAST> Body;
 class FunctionAST {
   std::unique_ptr<PrototypeAST> Proto;
   std::unique_ptr<ExprAST> Body;

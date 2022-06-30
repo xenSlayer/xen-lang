@@ -8,9 +8,9 @@ class ILogger {
 public:
   virtual std::unique_ptr<ExprAST> LogError(const std::string error) = 0;
   virtual std::unique_ptr<PrototypeAST> LogErrorP(const std::string &error) = 0;
-  virtual void error(const std::string &error) = 0;
-  virtual void warning(const std::string &error) = 0;
-  virtual void log(const std::string &error) = 0;
+  virtual void error(const char *error) = 0;
+  virtual void warning(const char *error) = 0;
+  virtual void log(const char *error) = 0;
 };
 
 // The LogError routines are simple helper routines that our parser will use to
@@ -27,20 +27,21 @@ public:
   }
 
   // not  sure why exactly they have logger for prototypeAST
+  // log prototype errors
   std::unique_ptr<PrototypeAST> LogErrorP(const std::string &error) override {
     LogError(error);
     return nullptr;
   }
 
-  void error(const std::string &error) override {
+  void error(const char *error) override {
     std::cout << "[ERROR]: " << error << std::endl;
   }
 
-  void warning(const std::string &error) override {
+  void warning(const char *error) override {
     std::cout << "[WARNING]: " << error << std::endl;
   }
 
-  void log(const std::string &error) override {
+  void log(const char *error) override {
     std::cout << "[LOG]: " << error << std::endl;
   }
 };

@@ -1,0 +1,33 @@
+{
+	"Template docs": {
+		"scope": "c++, cpp, cc",
+		"prefix": "docs-template",
+		"body": [
+			"/**",
+			"* Storage for arbitrary data with log(N) lookup.",
+			"*",
+			"* ...",
+			"*",
+			"* @tparam T the type of data stored in the table",
+			"* @tparam ComparatorT callable defining a strict weak ordering for objects",
+			"*     of type `T`. Its `operator()` must accept two `T` and return `true`",
+			"*     if and only if the first argument comes before the second. It must",
+			"*     not throw exceptions.",
+			"*/"
+		],
+		"description": "documentation for c++ templates"
+	},
+	"function docs": {
+		"scope": "c++, cpp, cc",
+		"prefix": "docs-function",
+		"body": [
+			"/**",
+			"* ~definition",
+			"*",
+			"* @param values Container whose values are summed.",
+			"* @return sum of `values`, or 0.0 if `values` is empty.",
+			"*/"
+		],
+		"description": "documentation for c++ function"
+	}
+}

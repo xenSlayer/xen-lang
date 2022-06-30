@@ -3,11 +3,13 @@
 #include <string>
 
 class Token {
+
 public:
-  const char *data;
+  std::string data;
   int type;
   unsigned int line;
-  Token(const char *data, unsigned int line, int type)
+
+  Token(std::string data, unsigned int line, int type)
       : data(data), line(line), type(type) {}
 };
 
@@ -19,11 +21,19 @@ enum _TokenType {
   // commands
   tok_def = -2,
   tok_extern = -3,
-  tok_return = 0,
 
   // primary
   tok_identifier = -4,
   tok_number = -5,
+
+  // punctuation
+  // '('
+  tok_open_paran = -30,
+  // ')'
+  tok_close_paran = -31,
+  // '.'
+  tok_comma = -32,
+
 };
 
 typedef enum _TokenType TokenType;

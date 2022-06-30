@@ -6,7 +6,8 @@ def fib(x)
       fib(x-1)+fib(x-2)
 
 # This expression will compute the 40th number.
-fib(40)
+# foo bar
+fib(40) # comment line
 
 # expressions #
 ## keywords ##
@@ -18,3 +19,5 @@ fib(40)
 
 def print_name(string name)
     print(name)
+
+def fib(x)

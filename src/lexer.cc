@@ -1,31 +1,64 @@
 #include <cstdio>
+#include <iostream>
+#include <map>
 #include <stdlib.h>
 #include <string>
 
 #include "../include/token.h"
+#include "utils.cc"
+
+std::string pathToFile = "C:\\Users\\kiran\\Desktop\\xen-lang-"
+                         "LLVM\\test\\test.xen";
 
 class ILexer {
+private:
+  virtual Token *tokenizer() = 0;
+
 public:
-  virtual int get_token() = 0;
+  virtual Token *get_token() = 0;
 };
 
 class Lexer : ILexer {
 private:
-  std::map<unsigned int, std::string> buffer;
-  static std::string IdentifierStr; // Filled in if tok_identifier
-  static double NumVal;             // Filled in if tok_number
+  std::ifstream file;
+  const std::map<unsigned int, std::string> *buffer;
+  // create tokens from buffer
+  Token *tokenizer() override {
+    // tokenize one line at a time
+    // run when parser needs next token
+    std::string *identifierStr = new std::string();
+    double numval;
+    // loop through each line
+    for (auto const &buff : *buffer) {
+      // loop through each charachter
+      for (int i = 0; i < buff.second.length(); i++) {
+        // is space encountered then increment i
+        if (buff.second[i] == ' ') {
+          i++;
+        }
+        if (isalpha(buff.second[i])) {
+          *identifierStr += buff.second[i];
+          i++;
+          if (isalnum(buff.second[i])) {
+            *identifierStr += buff.second[i];
+          }
+        }
+      }
+    }
+  }
+
 public:
-  Lexer(std::map<unsigned int, std::string> buffer) : buffer(buffer) {}
+  Lexer() {
+    Utils *utils = new Utils();
+    buffer = utils->scanner(pathToFile);
+  }
+
+  ~Lexer() { delete buffer; }
 
   // gettok - Return the next token from standard input.
   // Todo convert get_token to read whole content of the file rather then
   // console content
   Token *get_token() override {
-
-    for (auto const &buff : buffer) {
-      Token token = Token(buff.second, buff.first, tok_identifier);
-      (*token_list).push_back(token);
-    }
 
     static int LastChar = ' ';
 

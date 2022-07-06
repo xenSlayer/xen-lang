@@ -9,8 +9,8 @@ public:
   int type;
   unsigned int line;
 
-  Token(std::string data, unsigned int line, int type)
-      : data(data), line(line), type(type) {}
+  Token(std::string data, unsigned int line_number, int type)
+      : data(data), line(line_number), type(type) {}
 };
 
 // The lexer returns tokens [0-255] if it is an unknown character, otherwise

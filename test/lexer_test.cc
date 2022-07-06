@@ -1,89 +1,101 @@
-// Online C++ compiler to run C++ program online
 #include <iostream>
-#include <map>
 #include <string>
-#include <vector>
+// #include <string_view>
 
-// #include "../include/memory.h"
-#include "../include/token.h"
+class Tokenizer {
+public:
+  Tokenizer(std::string &input) : m_input(input){};
 
-// void clearIdentifierData() { *identifierStr = ""; };
+  std::string next() {
+    while (m_index < m_input.size()) {
+      char c = m_input.at(m_index);
+      switch (c) {
+      case '_':
+      case 'a':
+      case 'b':
+      case 'c':
+      case 'd':
+      case 'e':
+      case 'f':
+      case 'g':
+      case 'h':
+      case 'i':
+      case 'j':
+      case 'k':
+      case 'l':
+      case 'm':
+      case 'n':
+      case 'o':
+      case 'p':
+      case 'q':
+      case 'r':
+      case 's':
+      case 't':
+      case 'u':
+      case 'v':
+      case 'w':
+      case 'x':
+      case 'y':
+      case 'z':
+      case 'A':
+      case 'B':
+      case 'C':
+      case 'D':
+      case 'E':
+      case 'F':
+      case 'G':
+      case 'H':
+      case 'I':
+      case 'J':
+      case 'K':
+      case 'L':
+      case 'M':
+      case 'N':
+      case 'O':
+      case 'P':
+      case 'Q':
+      case 'R':
+      case 'S':
+      case 'T':
+      case 'U':
+      case 'V':
+      case 'W':
+      case 'X':
+      case 'Y':
+      case 'Z': {
+        unsigned int m_init = m_index;
+        do {
+          m_index++;
+        } while (isalnum(m_input.at(m_index)));
 
-int main() {
-  std::string *identifierStr = new std::string();
-  char punctuation = ' ';
-  double numval;
-  std::vector<Token> *tokens = new std::vector<Token>();
-  Token *token;
-
-  std::map<unsigned int, std::string> *buffer =
-      new std::map<unsigned int, std::string>();
-
-  (*buffer)[1] = "def xen kiran(k, k)";
-  (*buffer)[2] = "kiran paudel";
-  (*buffer)[3] = "xe";
-
-  for (auto const &buff : *buffer) {
-    // loop through each charachter
-    for (int i = 0; i < buff.second.length(); i++) {
-      // is space encountered then increment i and clear identiferStr
-      if (isalpha(buff.second[i]) || buff.second[i] == '_') {
-        *identifierStr += buff.second[i];
-        i++;
-        while (isalnum(buff.second[i])) {
-          *identifierStr += buff.second[i];
-          // i++;
-        }
-      }
-      if (buff.second[i] == '(') {
-        token = new Token("(", buff.first, tok_open_paran);
-        (*tokens).push_back(*token);
-        // i++;
-      }
-
-      if (buff.second[i] == ')') {
-        token = new Token(")", buff.first, tok_close_paran);
-        (*tokens).push_back(*token);
-        // i++;
-      }
-
-      if (buff.second[i] == ',') {
-        token = new Token(",", buff.first, tok_comma);
-        (*tokens).push_back(*token);
-        // i++;
-      }
-
-      if (buff.second[i] == '#') {
+        return m_input.substr(m_init, m_index);
         break;
       }
-
-      // if(buff.second[i] == '(') {break;}
-      if (buff.second[i] == ' ' || i == buff.second.length()) {
-        if (*identifierStr == "def") {
-          token = new Token(*identifierStr, buff.first, tok_def);
-          (*tokens).push_back(*token);
-          delete token;
-          *identifierStr = "";
-        } else {
-          token = new Token(*identifierStr, buff.first, tok_identifier);
-          delete token;
-          // clear the identifierStr
-          *identifierStr = "";
-        }
+      case '(':
+        return m_input.substr(m_index, m_index);
+      default:
+        break;
       }
+      m_index++;
+      m_input.substr(0, 20);
     }
-    *identifierStr = "";
   }
 
-  for (int i = 0; i < (*tokens).size(); i++) {
-    std::cout << (*tokens)[i].data << " :: " << (*tokens)[i].type
-              << " :: " << (*tokens)[i].line << std::endl;
-  }
+private:
+  std::string &m_input;
+  unsigned int m_index{0};
+};
 
-  (*buffer).clear();
-  delete identifierStr;
-  delete tokens;
-  delete buffer;
-  // PrintMemoryUsage();
+int main() {
+  std::string code = "def kiran(int 20, int ok) {}";
+  Tokenizer *tokenizer = new Tokenizer(code);
+  int i = 0;
+  std::cout << isalnum('2') << std::endl;
+
+  // while (i < 4) {
+  //   std::cout << tokenizer->next() << std::endl;
+  //   i++;
+  // }
+
   return 0;
 }

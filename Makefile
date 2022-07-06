@@ -1,13 +1,30 @@
-SRC_DIR := ../src
-OBJ_DIR := .../obj
-SRC_FILES := $(wildcard $(SRC_DIR)/*.cc)
-OBJ_FILES := $(patsubst $(SRC_DIR)/%.cc,$(OBJ_DIR)/%.o,$(SRC_FILES))
-LDFLAGS := ...
-CPPFLAGS := ...
-CXXFLAGS := ...
+CC = g++
+CFLAGS = -c -std=c99 -g
+LDFLAGS = -g
+SRC = ${wildcard src/*.cc}
+HDR = ${wildcard include/*.h}
+OBJ = ${SRC:.cc=.o}
+EXEC = xen
 
-main.exe: $(OBJ_FILES)
-   g++ $(LDFLAGS) -o $@ $^
+all: ${SRC} ${OBJ} ${EXEC}
+	make clean
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-   g++ $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
+debug: all
+debug: CFLAG += -DDEBUG
+
+FLEX = flex++
+files := ${wildcard lexer/*.l}
+LEXER_SRC = ${wildcard lexer/*.cc}
+build-lexer: $(files)
+	$(FLEX) $(files)
+	${CC} ${LEXER_SRC} -o lexer
+
+
+$(EXEC): ${OBJ}
+	$(CC) ${LDFLAGS} $^ -o $@
+
+%.o: %.c ${HDR}
+	${CC} ${CFLAGS} $< -o $@
+
+clean:
+	rm ./src/*.o

@@ -5,17 +5,7 @@ def fib(x)
     else
       fib(x-1)+fib(x-2)
 
-# This expression will compute the 40th number.
-# foo bar
 fib(40) # comment line
-
-# expressions #
-## keywords ##
-# def, return, then, if, else
-## identifier ##
-# fib, x
-## operators ##
-# <, +, -
 
 def print_name(string name)
     print(name)

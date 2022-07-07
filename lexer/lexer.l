@@ -1,37 +1,46 @@
 %{
     /* definitions */
+    #include "token.h"
 %}
 
-numbers ([0-9])+
+/* %option noyywrap c++ */
+%option outfile="lexer/lex.yy.c"
 
-/* rules */
+NUMBERS [0-9]
+
+/* rule */
 %%
 
-"def"|"return"|"if"|"else"|"int" {printf("keyword ");}
+"def" return DEF;
+"return" return RETURN;
+"if" return IF;
+"else" return ELSE;
+"int" return INT;
+"string" return STRING;
+"double" return DOUBLE;
 
-([a-zA-Z_])([a-zA-Z0-9_])* {printf("identifier ");}
+([a-zA-Z_])([a-zA-Z0-9_])* return IDENTIFIER;
 
-([0-9])+ {printf("numbers ");}
-([0-9])+(.)([0-9])+ {printf("double numbers ");}
+{NUMBERS}+ return NUMBER;
+([0-9])+(".")([0-9])+ return DOUBLE_NUMBER;
 
-[{] {printf("open-paran ");}
-[}] {printf("close-paran ");}
-[(] {printf("open-bracket ");}
-[)] {printf("close-bracket ");}
+[{] return OPEN_PARAN;
+[}] return CLOSE_PARAN;
+[(] return OPEN_BRACKET;
+[)] return CLOSE_BRACKET;
 
- "+"|"-"|"*"|"/"|"=" {printf("operator");}
+ "+" return ADD_OP;
+ "-" return SUB_OP;
+ "*" return MUL_OP;
+ "/" return DIV_OP;
+ "=" return EQ_OP;
 
-(:) {printf("colon ");}
-(,) {printf("separator ");}
+(:) return COLON;
+(;) return SEMI_COLON;
+(,) return COMMA;
 
-#(.)+ {printf("comment-line ");}
+#(.)+ ;
 
 %%
 
-yywrap() {return 0;}
-
-int main() {
-    printf("Enter a string: ");
-    yylex();
-    return 0;
-}
+int yywrap(void) {return 1;}

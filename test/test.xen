@@ -1,13 +1,11 @@
 # Compute the x'th fibonacci number.
-def fib(x)
-    if x < 3
+def fib(x):
+    if x < 3:
       return 1
-    else
+    else:
       fib(x-1)+fib(x-2)
 
-fib(40) # comment line
+fib(40) # calculate
 
-def print_name(string name)
+def print_name(string name):
     print(name)
-
-def fib(x)

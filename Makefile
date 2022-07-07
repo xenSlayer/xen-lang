@@ -5,6 +5,7 @@ SRC = ${wildcard src/*.cc}
 HDR = ${wildcard include/*.h}
 OBJ = ${SRC:.cc=.o}
 EXEC = xen
+CDIR = ${CMAKE_CURRENT_BINARY_DIR}
 
 all: ${SRC} ${OBJ} ${EXEC}
 	make clean
@@ -12,13 +13,11 @@ all: ${SRC} ${OBJ} ${EXEC}
 debug: all
 debug: CFLAG += -DDEBUG
 
-FLEX = flex++
-files := ${wildcard lexer/*.l}
-LEXER_SRC = ${wildcard lexer/*.cc}
-build-lexer: $(files)
-	$(FLEX) $(files)
-	${CC} ${LEXER_SRC} -o lexer
-
+FLEX = flex
+LEXER_FILES := ${wildcard lexer/*.l}
+LEXER_OUT = ${wildcard lexer/*.yy.*}
+lexer: $(LEXER_FILES)
+	$(FLEX) $(LEXER_FILES)
 
 $(EXEC): ${OBJ}
 	$(CC) ${LDFLAGS} $^ -o $@

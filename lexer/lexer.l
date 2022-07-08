@@ -1,10 +1,13 @@
 %{
     /* definitions */
-    #include "token.h"
+    #include "../include/token.h"
 %}
 
 /* %option noyywrap c++ */
 %option outfile="lexer/lex.yy.c"
+%option case-insensitive
+%option yylineno
+%option yywrap
 
 NUMBERS [0-9]
 
@@ -29,11 +32,11 @@ NUMBERS [0-9]
 [(] return OPEN_BRACKET;
 [)] return CLOSE_BRACKET;
 
- "+" return ADD_OP;
- "-" return SUB_OP;
- "*" return MUL_OP;
- "/" return DIV_OP;
- "=" return EQ_OP;
+"+" return ADD_OP;
+"-" return SUB_OP;
+"*" return MUL_OP;
+"/" return DIV_OP;
+"=" return EQ_OP;
 
 (:) return COLON;
 (;) return SEMI_COLON;

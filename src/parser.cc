@@ -39,10 +39,15 @@ class Parser : IParser {
 
 private:
   Logger *logger = new Logger();
+  Lexer *lexer = new Lexer();
+
   // / getNextToken reads another token from the lexer and updates CurTok with
   // / its results.
 public:
-  ~Parser() { delete logger; }
+  ~Parser() {
+    delete logger;
+    delete lexer;
+  }
 
   int getNextToken() override {
     std::unique_ptr<Lexer> lexer = std::make_unique<Lexer>();

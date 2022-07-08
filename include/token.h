@@ -1,8 +1,6 @@
 #ifndef XEN_TOKEN_H
 #define XEN_TOKEN_H
 
-#include <string>
-
 // keywords
 #define DEF -2
 #define RETURN -3
@@ -40,11 +38,11 @@
 class Token {
 
 public:
-  std::string data;
+  const char *data;
   int type;
   unsigned int line;
 
-  Token(std::string data, int type, unsigned int line_number)
+  Token(const char *data, int type, unsigned int line_number)
       : data(data), type(type), line(line_number) {}
 };
 

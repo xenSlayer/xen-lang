@@ -1,7 +1,8 @@
 #include <iostream>
 
 #include "../include/memory.h"
-#include "../token.h"
+#include "../include/token.h"
+#include "../lexer/lex.yy.c"
 
 extern int yylex();
 extern int yylineno;

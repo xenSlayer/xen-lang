@@ -15,7 +15,6 @@ debug: CFLAG += -DDEBUG
 
 FLEX = flex
 LEXER_FILES := ${wildcard lexer/*.l}
-LEXER_OUT = ${wildcard lexer/*.yy.*}
 lexer: $(LEXER_FILES)
 	$(FLEX) $(LEXER_FILES)
 
@@ -26,4 +25,4 @@ $(EXEC): ${OBJ}
 	${CC} ${CFLAGS} $< -o $@
 
 clean:
-	rm ./src/*.o
+	rm -f ./src/*.o

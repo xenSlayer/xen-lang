@@ -20,8 +20,8 @@
 // brackets
 #define OPEN_PARAN -30
 #define CLOSE_PARAN -31
-#define OPEN_BRACKET -32
-#define CLOSE_BRACKET -33
+#define OPEN_BRACE -32
+#define CLOSE_BRACE -33
 
 // binary operators
 #define ADD_OP -40

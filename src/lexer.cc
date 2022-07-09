@@ -3,7 +3,7 @@
 #include "../include/token.h"
 #include "../lexer/lex.yy.c"
 
-const char *pathToFile = "C:\\Users\\kiran\\Desktop\\xen-lang\\test\\test.xen";
+const char *p2F = "C:\\Users\\kiran\\Desktop\\xen-lang\\test\\test.xen";
 
 extern int yylex();
 extern int yylineno;
@@ -12,23 +12,30 @@ extern FILE *yyin, *yyout;
 
 class ILexer {
 public:
-  virtual Token get_token() = 0;
+  virtual Token *get_token() = 0;
 };
 
 // impl
 class Lexer : ILexer {
+
+private:
+  Token *token;
+
 public:
-  Token get_token() override {
-    yyin = fopen(pathToFile, "r");
+  Lexer() { yyin = fopen(p2F, "r"); }
+  ~Lexer() {
+    fclose(yyin);
+    delete token;
+    delete yytext;
+    delete yyin;
+    delete yyout;
+  }
+  Token *get_token() override {
     int curToken = yylex();
     if (curToken) {
-      Token token = Token(yytext, curToken, yylineno);
+      Token tok = Token(yytext, curToken, yylineno);
+      token = &tok;
       return token;
-    } else {
-      fclose(yyin);
-      delete yytext;
-      delete yyin;
-      delete yyout;
     }
   }
 };

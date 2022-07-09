@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.l": "lex",
         "atomic": "cpp",
         "bit": "cpp",
         "cctype": "cpp",
@@ -46,7 +47,8 @@
         "xstring": "cpp",
         "xtr1common": "cpp",
         "xtree": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "lex.yy.c": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

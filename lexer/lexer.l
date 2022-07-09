@@ -4,10 +4,7 @@
 %}
 
 /* %option noyywrap c++ */
-%option outfile="lexer/lex.yy.c"
-%option case-insensitive
-%option yylineno
-%option yywrap
+%option outfile="lexer/lex.yy.c" case-insensitive yylineno noyywrap
 
 NUMBERS [0-9]
 
@@ -27,10 +24,10 @@ NUMBERS [0-9]
 {NUMBERS}+ return NUMBER;
 ([0-9])+(".")([0-9])+ return DOUBLE_NUMBER;
 
-[{] return OPEN_PARAN;
-[}] return CLOSE_PARAN;
-[(] return OPEN_BRACKET;
-[)] return CLOSE_BRACKET;
+[{] return OPEN_BRACE;
+[}] return CLOSE_BRACE;
+[(] return OPEN_PARAN;
+[)] return CLOSE_PARAN;
 
 "+" return ADD_OP;
 "-" return SUB_OP;
@@ -45,5 +42,3 @@ NUMBERS [0-9]
 #(.)+ ;
 
 %%
-
-int yywrap(void) {return 1;}

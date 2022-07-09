@@ -15,8 +15,10 @@ debug: CFLAG += -DDEBUG
 
 FLEX = flex
 LEXER_FILES := ${wildcard lexer/*.l}
+
 lexer: $(LEXER_FILES)
 	$(FLEX) $(LEXER_FILES)
+
 
 $(EXEC): ${OBJ}
 	$(CC) ${LDFLAGS} $^ -o $@

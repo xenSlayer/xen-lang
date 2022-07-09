@@ -6,8 +6,10 @@
 // interfacec for logger class
 class ILogger {
 public:
-  virtual std::unique_ptr<ExprAST> LogError(const std::string error) = 0;
-  virtual std::unique_ptr<PrototypeAST> LogErrorP(const std::string &error) = 0;
+  virtual std::unique_ptr<ExprAST> LogError(const std::string error,
+                                            unsigned int line_no) = 0;
+  virtual std::unique_ptr<PrototypeAST> LogErrorP(const std::string &error,
+                                                  unsigned int line_no) = 0;
   virtual void error(const char *error) = 0;
   virtual void warning(const char *error) = 0;
   virtual void log(const char *error) = 0;
@@ -19,17 +21,19 @@ public:
 class Logger : ILogger {
 public:
   /// LogError* - These are little helper functions for error handling.
-  std::unique_ptr<ExprAST> LogError(const std::string error) override {
+  std::unique_ptr<ExprAST> LogError(const std::string error,
+                                    unsigned int line_no) override {
     // print error in console screen
     // fprintf(stderr, " %s\n", error);
-    std::cout << "[ERROR]: " << error << std::endl;
+    std::cout << "[ERROR]: " << error << " in line " << line_no << std::endl;
     return nullptr;
   }
 
   // not  sure why exactly they have logger for prototypeAST
   // log prototype errors
-  std::unique_ptr<PrototypeAST> LogErrorP(const std::string &error) override {
-    LogError(error);
+  std::unique_ptr<PrototypeAST> LogErrorP(const std::string &error,
+                                          unsigned int line_no) override {
+    LogError(error, line_no);
     return nullptr;
   }
 

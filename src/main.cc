@@ -26,16 +26,13 @@ int main(int argc, const char *argv[]) {
 
   std::cout << "starting xen compiler..." << std::endl;
 
-  Lexer lexer = Lexer();
-  Token token = lexer.get_token();
-  while (token.data) {
-    std::cout << token.line << ". " << token.data << " :: type " << token.type
-              << std::endl;
-    token = lexer.get_token();
-  }
+  Lexer *lexer = new Lexer();
+  Token *token = lexer->get_token();
+
+  delete lexer;
+  delete token;
 
   PrintMemoryUsage();
-  std::cin.get();
 
   return 0;
 }
